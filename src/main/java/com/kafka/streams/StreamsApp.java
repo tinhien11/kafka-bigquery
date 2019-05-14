@@ -25,23 +25,25 @@ public class StreamsApp {
 
         JSONObject obj = new JSONObject(value);
 
-        Map<String, Object> rowContent = new HashMap<>();
-        rowContent.put("first_name", obj.get("first_name"));
-        rowContent.put("last_name", obj.get("last_name"));
-        rowContent.put("enter_time", obj.get("timestamp"));
+        // Define rows to insert
+        Map<String, Object> firstRow = new HashMap<>();
+        Map<String, Object> secondRow = new HashMap<>();
+        firstRow.put("first_name", obj.get("first_name"));
+        firstRow.put("last_name", obj.get("last_name"));
+        firstRow.put("enter_time", obj.get("timestamp"));
 
-        InsertAllResponse response =
-                bigquery.insertAll(
-                        InsertAllRequest.newBuilder(tableId)
-                                .addRow("rowId", rowContent)
-                                // More rows can be added in the same RPC by invoking .addRow() on the builder
-                                .build());
-        System.out.println(response);
-        if (response.hasErrors()) {
-            // If any of the insertions failed, this lets you inspect the errors
-            for (Entry<Long, List<BigQueryError>> entry : response.getInsertErrors().entrySet()) {
-                // inspect row error
-            }
+        // Create an insert request
+        InsertAllRequest insertRequest = InsertAllRequest.newBuilder(tableId)
+                .addRow(firstRow)
+                .build();
+        // Insert rows
+        InsertAllResponse insertResponse = bigquery.insertAll(insertRequest);
+
+        System.out.println(insertResponse);
+
+        // Check if errors occurred
+        if (insertResponse.hasErrors()) {
+            System.out.println("Errors occurred while inserting rows");
         }
     }
 
