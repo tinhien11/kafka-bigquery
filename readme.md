@@ -1,5 +1,13 @@
 # Kafka streaming messages to google big query API
 
+Desc:   
+Producer send string message to "input-topic".
+Messages is no following Avgo schema (skip setup confluent)   
+Messages look like:   
+{"first_name": "joe", "last_name": "f", "timestamp": 1557804338} .    
+Kafka stream message and insert direct to bigquery table by using gcloud bigquery API  
+
+
 1. Create data set and table name "emp" from bigquery UI
 
 2. Create a streaming topic
